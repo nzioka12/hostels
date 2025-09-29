@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HostelHub — Find & Book Hostels</title>
+  <meta name="description" content="A sample hostel listing website with photos, table of hostel details, video, and booking steps. Ready for GitHub Pages." />
+
+  <style>
+    :root{
+      --bg:#f7f9fb;
+      --card:#ffffff;
+      --accent:#0b73ff;
+      --muted:#6b7280;
+      --radius:12px;
+      --maxw:1100px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--bg);
+      color:#0f172a;
+      line-height:1.45;
+      -webkit-font-smoothing:antialiased;
+    }
+    .wrap{max-width:var(--maxw);margin:28px auto;padding:20px;}
+    header{display:flex;gap:18px;align-items:center;margin-bottom:18px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{
+      width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#6ec1ff);
+      display:grid;place-items:center;color:white;font-weight:700;font-size:20px;box-shadow:0 6px 18px rgba(11,115,255,0.12)
+    }
+    h1{font-size:22px;margin:0}
+    p.lead{margin:4px 0 0;color:var(--muted)}
+
+    /* grid layout */
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:16px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:0 6px 18px rgba(12,20,40,0.06)}
+
+    /* gallery */
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    @media (max-width:700px){.gallery{grid-template-columns:repeat(2,1fr)}}
+    .gallery img{width:100%;display:block;border-radius:8px;height:140px;object-fit:cover}
+
+    /* hostels table */
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:10px 8px;border-bottom:1px solid #eef2f6;text-align:left;font-size:14px}
+    th{background:#fbfdff;font-weight:600;color:#0f172a}
+
+    /* video responsive */
+    .video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin-top:8px}
+    .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+
+    /* booking list */
+    ol.booking{padding-left:1.1rem;margin:12px 0;color:var(--muted)}
+    ol.booking li{margin:8px 0}
+
+    /* search + filters */
+    .search{display:flex;gap:10px;margin-bottom:12px}
+    .search input, .search select{flex:1;padding:10px;border-radius:10px;border:1px solid #e6eef9;background:#fbfdff}
+    .search button{background:var(--accent);color:white;padding:10px 14px;border-radius:10px;border:0;cursor:pointer}
+
+    /* sidebar */
+    .sidebar h3{margin-top:0}
+    .price-badge{display:inline-block;background:#eef7ff;color:var(--accent);padding:6px 10px;border-radius:999px;font-weight:700}
+
+    /* footer */
+    footer{margin-top:22px;text-align:center;color:var(--muted);font-size:13px}
+    a{color:var(--accent);text-decoration:none}
+    .small{font-size:13px;color:var(--muted)}
+    .flex{display:flex;gap:10px;align-items:center}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#f1f5f9;font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">HH</div>
+        <div>
+          <h1>HostelHub</h1>
+          <p class="lead">Find affordable hostels, view photos, compare details, and follow simple booking steps.</p>
+        </div>
+      </div>
+      <div style="margin-left:auto" class="small">Template • Plain HTML • GitHub Pages-ready</div>
+    </header>
+
+    <!-- search & filters -->
+    <section class="card">
+      <form class="search" role="search" onsubmit="event.preventDefault(); filterHostels();">
+        <input id="q" type="search" placeholder="Search city or hostel name (e.g., Nairobi, Sunrise Hostel)" aria-label="Search hostels" />
+        <select id="city">
+          <option value="">All cities</option>
+          <option>Nairobi</option>
+          <option>Mombasa</option>
+          <option>Kisumu</option>
+        </select>
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="grid">
+        <!-- main column -->
+        <main>
+          <!-- hero gallery -->
+          <section class="card" aria-labelledby="galleryTitle">
+            <h2 id="galleryTitle">Featured Hostels</h2>
+            <p class="small">Tap any image to open full-size in a new tab.</p>
+            <div class="gallery" id="gallery">
+              <!-- sample images from picsum (placeholders). Replace with your images by editing the src. -->
+              <a href="https://picsum.photos/id/1018/1200/800" target="_blank" rel="noopener noreferrer"><img src="https://picsum.photos/id/1018/600/400" alt="Common area of a modern hostel"></a>
+              <a href="https://picsum.photos/id/1015/1200/800" target="_blank" rel="noopener noreferrer"><img src="https://picsum.photos/id/1015/600/400" alt="Hostel exterior at dusk"></a>
+              <a href="https://picsum.photos/id/1016/1200/800" target="_blank" rel="noopener noreferrer"><img src="https://picsum.photos/id/1016/600/400" alt="Cozy dorm room with bunks"></a>
+              <a href="https://picsum.photos/id/1027/1200/800" target="_blank" rel="noopener noreferrer"><img src="https://picsum.photos/id/1027/600/400" alt="Outdoor terrace with seating"></a>
+              <a href="https://picsum.photos/id/1031/1200/800" target="_blank" rel="noopener noreferrer"><img src="https://picsum.photos/id/1031/600/400" alt="Shared kitchen area"></a>
+              <a href="https://picsum.photos/id/1035/1200/800" target="_blank" rel="noopener noreferrer"><img src="https://picsum.photos/id/1035/600/400" alt="Reception and lounge"></a>
+            </div>
+          </section>
+
+          <!-- hostels table -->
+          <section class="card" aria-labelledby="tableTitle" style="margin-top:14px">
+            <h2 id="tableTitle">Hostel Listings</h2>
+            <p class="small">Compare price, location, and amenities. Click a row to view more (demo).</p>
+
+            <table id="hostelTable" aria-describedby="tableDesc">
+              <caption id="tableDesc" class="small" style="caption-side:bottom;text-align:left;padding-top:6px">Prices shown per person, per night (KES).</caption>
+              <thead>
+                <tr>
+                  <th>Hostel</th>
+                  <th>City</th>
+                  <th>Amenities</th>
+                  <th>Price (KES)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick="selectHostel(event)" style="cursor:pointer" data-name="Sunrise Hostel" data-city="Nairobi" data-price="1200" data-amenities="WiFi, Breakfast, Lockers">
+                  <td>Sunrise Hostel</td>
+                  <td>Nairobi</td>
+                  <td>WiFi, Breakfast, Lockers</td>
+                  <td class="price">1,200</td>
+                </tr>
+                <tr onclick="selectHostel(event)" style="cursor:pointer" data-name="Ocean View Lodge" data-city="Mombasa" data-price="1500" data-amenities="Beach access, Tours">
+                  <td>Ocean View Lodge</td>
+                  <td>Mombasa</td>
+                  <td>Beach access, Tours</td>
+                  <td class="price">1,500</td>
+                </tr>
+                <tr onclick="selectHostel(event)" style="cursor:pointer" data-name="Lakeside Dorms" data-city="Kisumu" data-price="900" data-amenities="Kitchen, Bicycle hire">
+                  <td>Lakeside Dorms</td>
+                  <td>Kisumu</td>
+                  <td>Kitchen, Bicycle hire</td>
+                  <td class="price">900</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- selected hostel preview -->
+            <div id="preview" style="margin-top:12px;display:none" class="card">
+              <h3 id="previewName">Selected Hostel</h3>
+              <p class="small" id="previewMeta"></p>
+              <div class="flex" style="margin-top:8px">
+                <div class="pill" id="previewPrice">KES 0</div>
+                <a id="previewLink" class="small" href="#" style="margin-left:auto">View on map</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- embedded video (e.g., hostel tour) -->
+          <section class="card" aria-labelledby="videoTitle" style="margin-top:14px">
+            <h2 id="videoTitle">Hostel Tour — Sample Video</h2>
+            <p class="small">You can replace the `src` with your own YouTube video or self-hosted video.</p>
+
+            <div class="video-wrap">
+              <!-- sample YouTube video; replace VIDEO_ID with yours -->
+              <iframe src="https://www.youtube.com/embed/ysz5S6PUM-U" title="Hostel tour example" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </section>
+
+          <!-- booking steps (ordered list) -->
+          <section class="card" aria-labelledby="stepsTitle" style="margin-top:14px">
+            <h2 id="stepsTitle">How to Book (simple steps)</h2>
+            <ol class="booking">
+              <li>Search for a hostel or click a listing from the table above.</li>
+              <li>Check the photos and the price displayed in the preview card.</li>
+              <li>Contact the hostel using the phone/email or click "View on map" to confirm availability.</li>
+              <li>Pay a deposit (if required) and confirm your dates.</li>
+              <li>Arrive at the hostel and show booking confirmation.</li>
+            </ol>
+
+            <p class="small">Tip: keep a screenshot or PDF of your booking confirmation.</p>
+          </section>
+        </main>
+
+        <!-- sidebar -->
+        <aside class="sidebar">
+          <div class="card">
+            <h3>Quick filters</h3>
+            <p class="small">Filter by price or amenities (demo)</p>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button onclick="filterByPrice(1000)" class="pill">Under 1,000</button>
+              <button onclick="filterByAmenity('WiFi')" class="pill">Has WiFi</button>
+            </div>
+
+            <hr style="margin:12px 0;border:none;border-top:1px solid #eef2f6">
+
+            <h3>Top pick</h3>
+            <div class="small">
+              <strong>Sunrise Hostel</strong>
+              <div class="small" style="margin-top:8px">Comfortable mixed dorms • Breakfast included • Free WiFi</div>
+              <div style="margin-top:10px">
+                <span class="price-badge">KES 1,200</span>
+                <div style="margin-top:8px"><a href="#tableTitle">See details</a></div>
+              </div>
+            </div>
+
+            <hr style="margin:12px 0;border:none;border-top:1px solid #eef2f6">
+            <h3>Contact</h3>
+            <p class="small">Questions? Email <a href="mailto:hello@hostelhub.example">hello@hostelhub.example</a></p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <footer class="small">
+      <div>Made with care — replace placeholder images with your photos before publishing.</div>
+      <div style="margin-top:6px">Want a dark theme or different color? <a href="#" onclick="alert('I can customize the theme — tell me which colors you like!')">Customize</a></div>
+    </footer>
+  </div>
+
+  <script>
+    /* Simple interactive behaviors (kept small, no build tools needed) */
+
+    function selectHostel(e){
+      const tr = e.currentTarget || e.target.closest('tr');
+      const name = tr.dataset.name;
+      const city = tr.dataset.city;
+      const price = tr.dataset.price;
+      const amenities = tr.dataset.amenities;
+
+      const preview = document.getElementById('preview');
+      document.getElementById('previewName').textContent = name;
+      document.getElementById('previewMeta').textContent = city + " • " + amenities;
+      document.getElementById('previewPrice').textContent = "KES " + Number(price).toLocaleString();
+      document.getElementById('previewLink').href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(name + ' ' + city);
+      preview.style.display = 'block';
+      preview.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+
+    function filterByPrice(limit){
+      const rows = Array.from(document.querySelectorAll('#hostelTable tbody tr'));
+      rows.forEach(r=>{
+        const price = Number(r.dataset.price);
+        r.style.display = price <= limit ? '' : 'none';
+      });
+    }
+
+    function filterByAmenity(amen){
+      const rows = Array.from(document.querySelectorAll('#hostelTable tbody tr'));
+      rows.forEach(r=>{
+        const has = r.dataset.amenities.toLowerCase().includes(amen.toLowerCase());
+        r.style.display = has ? '' : 'none';
+      });
+    }
+
+    function filterHostels(){
+      const q = document.getElementById('q').value.trim().toLowerCase();
+      const city = document.getElementById('city').value.trim().toLowerCase();
+      const rows = Array.from(document.querySelectorAll('#hostelTable tbody tr'));
+      rows.forEach(r=>{
+        const name = r.dataset.name.toLowerCase();
+        const rcity = r.dataset.city.toLowerCase();
+        const visible = (!q || name.includes(q) || rcity.includes(q)) && (!city || rcity === city);
+        r.style.display = visible ? '' : 'none';
+      });
+    }
+
+    // Accessibility: allow keyboard "Enter" to open preview when a row is focused
+    document.querySelectorAll('#hostelTable tbody tr').forEach(tr=>{
+      tr.tabIndex = 0;
+      tr.addEventListener('keydown', (e) => { if(e.key === 'Enter') selectHostel({currentTarget: tr}); });
+    });
+  </script>
+</body>
+</html>
